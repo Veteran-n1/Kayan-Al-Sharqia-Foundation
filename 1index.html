@@ -1,0 +1,560 @@
+```html name=index.html
+<!doctype html>
+
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ورشة الألمنيوم - صفحة رئيسية (محدث)</title>
+  <style>
+    :root{
+      --dark-metallic:#2B2F33;
+      --steel-gray:#6B7176;
+      --chrome-highlight:#C9CDD0;
+      --cool-blue:#2E6FA7;
+      --glass-blue:#5DA8D8;
+      --light-frost:#F2F4F6;
+      --card-radius:12px;
+      --frame-border:6px;
+      --max-frame-height:320px;
+      font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;color:var(--light-frost);min-height:100vh;
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(45,78,100,0.08), transparent 10%),
+        linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06)),
+        var(--dark-metallic);
+      background-blend-mode:overlay;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+      background-image:repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0 1px, rgba(0,0,0,0.02) 1px 2px);
+      opacity:0.25;mix-blend-mode:overlay;
+    }/* top strip */
+.top-strip{position:fixed;top:0;left:0;right:0;height:64px;
+  background: linear-gradient(90deg, var(--cool-blue), rgba(13,55,86,0.92));
+  color:var(--light-frost);display:flex;align-items:center;justify-content:center;padding:0 16px;z-index:40;
+  box-shadow:0 8px 30px rgba(0,0,0,0.55), inset 0 -1px rgba(255,255,255,0.03);
+  border-bottom:1px solid rgba(255,255,255,0.03);backdrop-filter: blur(2px);
+}
+.top-strip .contacts{position:absolute;left:18px;display:flex;gap:10px;align-items:center;z-index:45}
+.contact-text{display:flex;flex-direction:column;align-items:flex-start;line-height:1}
+.icon{width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.06));
+  border:1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4), inset 0 1px rgba(255,255,255,0.02);font-size:16px;
+}
+.top-strip .title{font-weight:700;letter-spacing:0.6px;z-index:45}
+
+.container{max-width:1200px;margin:96px auto 60px;display:grid;grid-template-columns:320px 1fr;gap:24px;padding:0 16px;position:relative;z-index:10}
+.left{display:flex;flex-direction:column;gap:22px}
+.logo-frame{background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(0,0,0,0.12));
+  padding:18px;border-radius:140px;width:220px;height:220px;align-self:center;display:flex;align-items:center;justify-content:center;position:relative;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.6), inset 0 6px 18px rgba(255,255,255,0.02);border: 4px solid var(--chrome-highlight);
+}
+.logo-frame.dragover{outline:3px dashed rgba(255,255,255,0.12)}
+.logo-frame img{width:160px;height:160px;object-fit:cover;border-radius:50%;background:linear-gradient(180deg,var(--light-frost),rgba(255,255,255,0.9));padding:6px;box-shadow:0 6px 18px rgba(0,0,0,0.4)}
+
+/* small controls overlay inside logo frame */
+.logo-controls{
+      position:absolute;
+      top:50%;
+      right:-70px;
+      transform:translateY(-50%);
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      align-items:stretch
+    }
+.logo-controls .btn{padding:6px 8px;font-size:12px}
+input[type="file"].hidden{display:none}
+
+.services{background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.08));
+  color:var(--light-frost);padding:12px;border-radius:12px;box-shadow: 0 12px 30px rgba(0,0,0,0.55);min-height:160px;display:flex;flex-direction:column;position:relative;border:1px solid rgba(255,255,255,0.03);
+}
+.services h3{margin:0 0 8px 0;font-size:20px;color:var(--light-frost)}
+/* make the description scrollable like "mouse wheel" behavior */
+.services .desc{
+  margin:0;color:var(--light-frost);line-height:1.5;padding-right:6px;
+  max-height:120px;overflow-y:auto;scroll-behavior:smooth;
+}
+/* custom thin scrollbar */
+.services .desc::-webkit-scrollbar{width:8px}
+.services .desc::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:8px}
+.services .badge-num{position:absolute;top:10px;left:10px;background: linear-gradient(180deg,var(--cool-blue),var(--glass-blue));border:3px solid var(--chrome-highlight);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700}
+
+.right{display:grid;grid-template-columns:repeat(2,1fr);grid-auto-rows:auto;gap:20px}
+.frame{background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:10px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border:var(--frame-border) solid var(--chrome-highlight);box-shadow: 0 18px 36px rgba(0,0,0,0.55), inset 0 4px 14px rgba(255,255,255,0.02);transition: transform .22s ease, box-shadow .22s ease; background-clip: padding-box;}
+.frame:hover{transform:translateY(-6px);box-shadow:0 28px 60px rgba(0,0,0,0.7)}
+.frame .inner{width:100%;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:8px}
+.frame .img-wrap{display:flex;align-items:center;justify-content:center;background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.06));border-radius:8px;overflow:hidden;padding:6px}
+.frame img{display:block;max-width:100%;height:auto;object-fit:contain;filter:drop-shadow(0 6px 14px rgba(0,0,0,0.45));}
+.frame .caption{background: linear-gradient(90deg, rgba(93,168,216,0.06), rgba(255,255,255,0.01));padding:8px;border-radius:8px;font-size:14px;color:var(--light-frost);display:flex;align-items:center;gap:8px;justify-content:center;border:1px solid rgba(255,255,255,0.03);}
+.frame .badge-num{position:absolute;top:12px;left:12px;background:linear-gradient(180deg,var(--cool-blue),var(--glass-blue));border:3px solid var(--chrome-highlight);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:white}
+.frame::before{content:"";position:absolute;inset:0;border-radius:12px;pointer-events:none;background:linear-gradient(120deg,rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.02) 30%, rgba(255,255,255,0.00) 60%);opacity:0.28;mix-blend-mode:screen;z-index:2;}
+.frame .edge-highlight{position:absolute;top:0;right:0;height:12px;width:60%;border-top-right-radius:12px;border-top-left-radius:12px;background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));mix-blend-mode:screen;pointer-events:none;opacity:0.9;z-index:4;}
+
+.controls-row{display:flex;gap:12px;align-items:center}
+.btn{background:linear-gradient(180deg,var(--cool-blue),var(--glass-blue));color:white;padding:10px 14px;border-radius:8px;box-shadow:0 12px 28px rgba(46,111,167,0.18);cursor:pointer;border:none;font-weight:700}
+.btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--light-frost)}
+
+.gallery-page{display:none;max-width:1100px;margin:90px auto;padding:16px;color:var(--dark-metallic);z-index:20}
+.gallery-header{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.back-home{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;background: linear-gradient(90deg, var(--chrome-highlight), #fff); border:1px solid rgba(0,0,0,0.06); cursor:pointer;box-shadow: 0 8px 18px rgba(0,0,0,0.12);}
+.albums-row{display:flex;gap:12px;margin-bottom:16px}
+.album-pill{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.03);cursor:pointer;border:1px solid rgba(255,255,255,0.02);color:var(--light-frost)}
+.album-pill.active{background:linear-gradient(90deg,var(--cool-blue),var(--glass-blue));color:white}
+
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.gallery-item{background:linear-gradient(180deg,#fff,#f7f7f8);padding:6px;border-radius:10px;box-shadow:0 12px 28px rgba(0,0,0,0.12);position:relative;display:flex;flex-direction:column;gap:8px;color:var(--dark-metallic)}
+.thumb{width:100%;aspect-ratio:16/10;overflow:hidden;border-radius:8px;display:flex;align-items:center;justify-content:center;background:#f4f4f4;cursor:pointer}
+.thumb img{max-width:100%;max-height:100%;object-fit:contain}
+.gallery-item .meta{display:flex;gap:8px;align-items:center;justify-content:space-between}
+.select-checkbox{transform:scale(1.1)}
+.dragging{opacity:.5}
+
+/* lightbox */
+#lightboxOverlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;visibility:hidden;opacity:0;transition:opacity .18s ease, visibility .18s;}
+#lightboxOverlay.show{visibility:visible;opacity:1}
+#lightboxOverlay .lightbox-img{max-width:calc(100% - 80px);max-height:calc(100% - 80px);box-shadow:0 20px 60px rgba(0,0,0,0.6);border-radius:8px}
+#lightboxOverlay .close-btn{position:absolute;top:18px;left:18px;background:rgba(255,255,255,0.9);color:#222;padding:8px 10px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
+
+@media (max-width:900px){.container{grid-template-columns:1fr;} .logo-frame{width:160px;height:160px} .right{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:560px){.right{grid-template-columns:1fr} .logo-frame{width:140px;height:140px} .gallery-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}}
+.meta div { color: rgba(0,0,0,0.75); font-size:13px; }
+
+  </style>
+</head>
+<body>  <div class="top-strip">
+    <div class="contacts">
+      <div style="display:flex;gap:8px;align-items:center">
+        <div class="icon">📞</div>
+        <div class="contact-text">
+          <a id="topPhone" href="#" style="color:var(--light-frost);text-decoration:none;font-weight:700">0558136586</a>
+          <a id="topWhats" href="#" style="color:var(--light-frost);text-decoration:none;font-size:12px">واتس اضغط</a>
+        </div>
+      </div>
+    </div>
+    <div class="title">ورشة الألمنيوم - <span id="siteTagline">أبواب، نوافذ، مطابخ، واجهات</span></div>
+  </div>  <main class="container" id="home">
+    <section class="left">
+      <div class="logo-frame" id="logoFrame" title="اسحب وافلت شعارك هنا أو اضغط زر تغيير الشعار">
+        <!-- شعار القناة سيظهر هنا -->
+        <img id="logoImg" src="" alt="شعار الورشة"><div class="logo-controls">
+      <label class="btn secondary" for="logoInput" style="cursor:pointer;padding:6px 10px;font-size:13px">تغيير الشعار</label>
+      <button class="btn secondary" id="removeLogoBtn" title="إزالة الشعار" type="button">إزالة</button>
+      <input type="file" id="logoInput" class="hidden" accept="image/*">
+    </div>
+  </div>
+
+  <div class="services">
+    <div class="badge-num">3</div>
+    <h3 id="servicesTitle">خدماتنا</h3>
+    <div class="desc" id="servicesDesc" tabindex="0" aria-label="وصف الخدمات">
+    </div>
+  </div>
+</section>
+
+<section class="right" id="framesRow">
+  <!-- أربعة إطارات تمثل 4 ألبومات مختلفة -->
+</section>
+
+  </main>  <div style="position:fixed;bottom:18px;left:18px;display:flex;gap:10px;z-index:50">
+    <button class="btn" id="viewAllBtn" type="button">عرض جميع الصور</button>
+    <button class="btn secondary" id="openGalleryBtn" type="button">إدارة الصور</button>
+  </div>  <section class="gallery-page" id="galleryPage">
+    <div class="gallery-header">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="back-home" id="backBtn" title="العودة" type="button">⬅</button>
+        <div class="uploader">
+          <label style="color:var(--dark-metallic);font-weight:700">رفع صور (صاحب الموقع)</label>
+          <input type="file" id="fileInput" accept="image/*" multiple>
+        </div>
+      </div>
+      <div class="controls-row">
+        <select id="moveToAlbum" aria-label="نقل المحدد إلى الألبوم" style="padding:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.06)"></select>
+        <button class="btn secondary" id="deleteSelected" type="button">حذف المحدد</button>
+      </div>
+    </div>
+    <div class="albums-row" id="albumsRow"></div>
+    <div id="galleryContent"><div class="gallery-grid" id="galleryGrid"></div></div>
+  </section>  <div id="lightboxOverlay" aria-hidden="true">
+    <button class="close-btn" id="lightboxClose" aria-label="إغلاق المعاينة" type="button">إغلاق</button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="تكبير الصورة">
+  </div>  <script>
+    /* =========== تغيير سريع للقيم (اضبطها كما تريد) =========== */
+    const SITE_LOGO_SRC = 'logo.png'; // مسار افتراضي داخل نفس المجلد
+
+    const CHANNEL_LOGO_KEY = 'channel_logo_v1'; // مفتاح التخزين المحلي للشعار الذي يرفعه المستخدم
+
+    const DISPLAY_PHONE = '0558136586';
+    const PHONE_INTL = '+966558136586';
+    const WHATSAPP_LINK = 'https://wa.me/966558136586';
+
+    const SITE_DESCRIPTION_HTML = `
+      نحن متخصصون في تقديم حلول متكاملة للزجاج والألمنيوم، مع لمسة عصرية وجودة عالية تناسب جميع احتياجاتكم.<br><br>
+      <strong>خدماتنا تشمل:</strong>
+      <ul>
+        <li>زجاج سكريت وأبواب زجاجية أنيقة وعملية للمنازل والمكاتب.</li>
+        <li>واجهات زجاجية حديثة تضيف لمسة فخامة للمباني والمتاجر.</li>
+        <li>مرايا متنوعة بأشكال وتصاميم تناسب جميع الأذواق.</li>
+        <li>مكاتب وأبواب ألمنيوم قوية وعملية مع خيارات متعددة للألوان والتصاميم.</li>
+        <li>درياش مطابخ ودريش سحاب لحلول عملية وعصرية للمساحات الداخلية.</li>
+        <li>تصاميم ورسومات خاصة حسب طلب العميل لإضفاء طابع شخصي ومميز.</li>
+      </ul>
+      <p>نلتزم بتقديم أعلى معايير الجودة والدقة في التنفيذ، مع فريق متخصص يضمن لكم منتجات تدوم طويلاً وتضيف قيمة جمالية ووظيفية لمشاريعكم.</p>
+    `;
+
+    const SECTION_NAMES = ['غرف زجاج', 'زجاج سكريات', 'مطابخ', 'اخرى'];
+
+    /* ======================================================== */
+
+    // إدارة التخزين المحلي للصور والألبومات
+    const albumNames = SECTION_NAMES.slice();
+    const STORAGE_KEY = 'aluminum_shop_albums_v3';
+
+    function loadStored(){
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return [];
+      try{
+        const obj = JSON.parse(raw);
+        // normalize to array if possible
+        if(Array.isArray(obj)) return obj;
+        // if object with numeric keys -> convert to array
+        const keys = Object.keys(obj);
+        const isNumericKeys = keys.every(k => String(Number(k)) === k);
+        if(isNumericKeys){
+          const arr = [];
+          for(let i=0;i<keys.length;i++){
+            arr[i] = obj[i] || [];
+          }
+          return arr;
+        }
+        return [];
+      }catch(e){
+        return [];
+      }
+    }
+    function saveStored(obj){
+      try{
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
+      }catch(err){
+        // quota exceeded or other storage issues
+        console.error('فشل حفظ الصور في localStorage:', err);
+        alert('تعذر حفظ الصور محليًا - مساحة التخزين ممتلئة. قم بحذف بعض الصور أو استخدم طريقة رفع خارجية.');
+      }
+    }
+
+    let albums = loadStored();
+    // ensure albums is an array and has entries for each album name
+    if(!Array.isArray(albums)) albums = [];
+    for(let i=0;i<albumNames.length;i++){
+      if(!Array.isArray(albums[i])) albums[i]=[];
+    }
+    saveStored(albums);
+
+    const placeholders = [
+      'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800"><rect width="100%" height="100%" fill="%232E6FA7"/><text x="50%" y="50%" font-size="48" fill="white" text-anchor="middle" dominant-baseline="middle">أبواب - مثال</text></svg>',
+      'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800"><rect width="100%" height="100%" fill="%235DA8D8"/><text x="50%" y="50%" font-size="48" fill="white" text-anchor="middle" dominant-baseline="middle">نوافذ - مثال</text></svg>',
+      'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800"><rect width="100%" height="100%" fill="%238B5A2B"/><text x="50%" y="50%" font-size="48" fill="white" text-anchor="middle" dominant-baseline="middle">مطابخ - مثال</text></svg>',
+      'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800"><rect width="100%" height="100%" fill="%234CAF50"/><text x="50%" y="50%" font-size="48" fill="white" text-anchor="middle" dominant-baseline="middle">مشاريع - مثال</text></svg>'
+    ];
+    for(let i=0;i<albumNames.length;i++) if(albums[i].length===0) albums[i] = [placeholders[i]];
+    saveStored(albums);
+
+    // populate header contact and services description and logo (prefer الشعار المرفوع من المستخدم)
+    const savedLogo = localStorage.getItem(CHANNEL_LOGO_KEY);
+    document.getElementById('logoImg').src = savedLogo || SITE_LOGO_SRC;
+    document.getElementById('logoImg').alt = 'شعار ورشة الألمنيوم';
+    document.getElementById('topPhone').textContent = DISPLAY_PHONE;
+    document.getElementById('topPhone').href = 'tel:' + PHONE_INTL; // keep the + for international dialing
+    document.getElementById('topWhats').textContent = 'واتس اضغط';
+    document.getElementById('topWhats').href = WHATSAPP_LINK;
+    document.getElementById('servicesDesc').innerHTML = SITE_DESCRIPTION_HTML;
+    document.getElementById('siteTagline').textContent = albumNames.join('، ');
+
+    // ---------- Logo upload handlers (single image for الإطار الدائري) ----------
+    const logoInput = document.getElementById('logoInput');
+    const logoImg = document.getElementById('logoImg');
+    const logoFrame = document.getElementById('logoFrame');
+    const removeLogoBtn = document.getElementById('removeLogoBtn');
+
+    logoInput.addEventListener('change', async (e)=>{
+      const f = e.target.files && e.target.files[0]; if(!f) return;
+      if(!f.type.startsWith('image/')){ alert('الملف ليس صورة'); return; }
+      const data = await fileToDataUrl(f);
+      logoImg.src = data; localStorage.setItem(CHANNEL_LOGO_KEY, data);
+    });
+
+    // إضافة دعم السحب والإفلات على الإطار
+    logoFrame.addEventListener('dragover',(e)=>{ e.preventDefault(); logoFrame.classList.add('dragover'); });
+    logoFrame.addEventListener('dragleave',()=>{ logoFrame.classList.remove('dragover'); });
+    logoFrame.addEventListener('drop', async (e)=>{
+      e.preventDefault(); logoFrame.classList.remove('dragover');
+      const f = (e.dataTransfer.files && e.dataTransfer.files[0]); if(!f) return;
+      if(!f.type.startsWith('image/')){ alert('الملف ليس صورة'); return; }
+      const data = await fileToDataUrl(f);
+      logoImg.src = data; localStorage.setItem(CHANNEL_LOGO_KEY, data);
+    });
+
+    removeLogoBtn.addEventListener('click', ()=>{
+      if(!confirm('إزالة الشعار المرفوع والعودة إلى الشعار الافتراضي؟')) return;
+      localStorage.removeItem(CHANNEL_LOGO_KEY);
+      logoImg.src = SITE_LOGO_SRC;
+    });
+
+    // ---------- Home sliders (rotate each frame every 3s) ----------
+    const framesRow = document.getElementById('framesRow');
+    let homeTimers = [];
+    let homeIndexes = [];
+
+    function clearHomeTimers(){ homeTimers.forEach(t => clearInterval(t)); homeTimers = []; homeIndexes = []; }
+
+    function renderHomeFrames(){
+      clearHomeTimers();
+      framesRow.innerHTML='';
+      for(let i=0;i<4;i++){
+        const frame = document.createElement('div'); frame.className='frame';
+        frame.dataset.album = i;
+        const badge = document.createElement('div'); badge.className='badge-num'; badge.textContent = i+4;
+        const inner = document.createElement('div'); inner.className='inner';
+        const imgWrap = document.createElement('div'); imgWrap.className='img-wrap'; imgWrap.style.height = 'auto';
+        const img = document.createElement('img'); img.alt = `ألبوم ${albumNames[i]} - صورة عرض`; img.loading='lazy';
+        imgWrap.appendChild(img);
+        const caption = document.createElement('div'); caption.className='caption'; caption.textContent = albumNames[i];
+
+        inner.appendChild(imgWrap); inner.appendChild(caption);
+        frame.appendChild(badge); frame.appendChild(inner);
+
+        const edge = document.createElement('div'); edge.className='edge-highlight'; frame.appendChild(edge);
+        frame.addEventListener('click',()=>{ openAlbum(i); });
+        framesRow.appendChild(frame);
+
+        const list = albums[i] && albums[i].length ? albums[i] : [placeholders[i]];
+        homeIndexes[i] = 0;
+        img.src = list[0] || placeholders[i];
+        img.addEventListener('load',()=>{ adaptFrameSize(imgWrap,img); });
+
+        const interval = setInterval(()=>{
+          const arr = albums[i] && albums[i].length ? albums[i] : [placeholders[i]];
+          if(arr.length===0) return;
+          homeIndexes[i] = (homeIndexes[i] + 1) % arr.length;
+          img.src = arr[homeIndexes[i]];
+        }, 3000);
+        homeTimers.push(interval);
+      }
+    }
+
+    function adaptFrameSize(container,img){
+      const maxHRaw = getComputedStyle(document.documentElement).getPropertyValue('--max-frame-height') || '320';
+      const maxH = parseInt(maxHRaw, 10) || 320;
+      const availableW = container.clientWidth || 300;
+      const ratio = (img.naturalHeight||1)/(img.naturalWidth||1);
+      const newH = Math.min(maxH, Math.round(availableW * ratio));
+      container.style.height = newH + 'px';
+    }
+
+    window.addEventListener('resize', ()=>{ document.querySelectorAll('.img-wrap img').forEach(img=>{ if(img.complete) adaptFrameSize(img.parentElement,img); }) });
+
+    // ---------- Gallery / Lightbox ----------
+    const galleryPage = document.getElementById('galleryPage');
+    const galleryGrid = document.getElementById('galleryGrid');
+    const albumsRow = document.getElementById('albumsRow');
+    const moveToAlbumSel = document.getElementById('moveToAlbum');
+
+    let currentAlbum = 0;
+    let viewMode = 'album';
+
+    function renderAlbumsPills(){ albumsRow.innerHTML = ''; moveToAlbumSel.innerHTML=''; albumNames.forEach((name,i)=>{ const pill = document.createElement('button'); pill.className='album-pill'; pill.textContent = name; pill.addEventListener('click',()=>{ openAlbum(i); }); if(i===currentAlbum) pill.classList.add('active'); albumsRow.appendChild(pill); const opt = document.createElement('option'); opt.value=i; opt.textContent = name; moveToAlbumSel.appendChild(opt); }); const allPill = document.createElement('button'); allPill.className='album-pill'; allPill.textContent='عرض الكل'; allPill.addEventListener('click',()=>{ openAll(); }); albumsRow.insertBefore(allPill,albumsRow.firstChild); }
+
+    function openAlbum(i){ clearHomeTimers(); currentAlbum = i; viewMode='album'; galleryPage.style.display='block'; document.getElementById('home').style.display='none'; renderAlbumsPills(); renderGalleryGrid(); }
+    function openAll(){ clearHomeTimers(); currentAlbum = 'all'; viewMode='all'; galleryPage.style.display='block'; document.getElementById('home').style.display='none'; renderAlbumsPills(); renderGalleryGrid(); }
+    function showHome(){ galleryPage.style.display='none'; document.getElementById('home').style.display='grid'; renderHomeFrames(); }
+
+    document.getElementById('openGalleryBtn').addEventListener('click',()=>{ openAlbum(0); });
+    document.getElementById('backBtn').addEventListener('click',()=>{ showHome(); });
+
+    document.getElementById('fileInput').addEventListener('change', async function(e){
+      const files = Array.from(e.target.files || []);
+      if(files.length===0) return;
+      const target = (currentAlbum==='all')?0:currentAlbum;
+      for(const f of files){
+        if(!f.type.startsWith('image/')) continue;
+        const data = await fileToDataUrl(f);
+        albums[target].unshift(data);
+      }
+      saveStored(albums); renderGalleryGrid(); renderHomeFrames();
+      e.target.value='';
+    });
+
+    function fileToDataUrl(file){
+      return new Promise((res,rej)=>{
+        const reader = new FileReader(); reader.onload = ()=>res(reader.result); reader.onerror=rej; reader.readAsDataURL(file);
+      })
+    }
+
+    function renderGalleryGrid(){
+      galleryGrid.innerHTML='';
+      const list = (viewMode==='all')? getAllImagesWithMeta() : albums[currentAlbum].map((src,idx)=>({src, album:currentAlbum, idx}));
+
+      list.forEach((item,i)=>{
+        const box = document.createElement('div'); box.className='gallery-item'; box.draggable = true; box.dataset.index = i;
+        const meta = document.createElement('div'); meta.className='meta';
+        const left = document.createElement('div');
+        const cb = document.createElement('input'); cb.type='checkbox'; cb.className='select-checkbox'; cb.dataset.i = i;
+        left.appendChild(cb);
+        const label = document.createElement('div'); label.style.fontSize='13px'; label.style.color='rgba(0,0,0,0.7)';
+        label.textContent = (viewMode==='all')? `${item.albumName} - صورة ${item.idx+1}` : `صورة ${item.idx+1}`;
+        left.appendChild(label);
+        meta.appendChild(left);
+        const right = document.createElement('div'); right.style.display='flex'; right.style.gap='8px';
+        const moveBtn = document.createElement('button'); moveBtn.className='btn secondary'; moveBtn.textContent='نقل'; moveBtn.setAttribute('type','button'); moveBtn.addEventListener('click',()=>{ promptMoveSingle(item); });
+        const delBtn = document.createElement('button'); delBtn.className='btn secondary'; delBtn.textContent='حذف'; delBtn.setAttribute('type','button'); delBtn.addEventListener('click',()=>{ if(confirm('حذف هذه الصورة؟')){ deleteImage(item.album, item.idx); } });
+        right.appendChild(moveBtn); right.appendChild(delBtn);
+        meta.appendChild(right);
+
+        const thumb = document.createElement('div'); thumb.className='thumb';
+        const img = document.createElement('img'); img.src = item.src; img.alt = (viewMode==='all') ? `${item.albumName} - صورة ${item.idx+1}` : `صورة ${item.idx+1}`; img.loading = 'lazy';
+        thumb.appendChild(img);
+
+        thumb.addEventListener('click', (e) => { e.stopPropagation(); openLightbox(item.src); });
+
+        box.appendChild(thumb); box.appendChild(meta);
+        galleryGrid.appendChild(box);
+
+        if(viewMode==='album'){
+          box.addEventListener('dragstart',(e)=>{ box.classList.add('dragging'); e.dataTransfer.setData('text/plain', item.idx); });
+          box.addEventListener('dragend',()=>{ box.classList.remove('dragging'); });
+          box.addEventListener('dragover',(e)=>{ e.preventDefault(); const after = getDragAfterElement(galleryGrid, e.clientY); if(after==null) galleryGrid.appendChild(box); else galleryGrid.insertBefore(box, after); });
+          box.addEventListener('drop',(e)=>{ e.preventDefault();
+            const newArr = Array.from(galleryGrid.querySelectorAll('.thumb img')).map(img=> img.src);
+            albums[currentAlbum] = newArr.concat([]);
+            saveStored(albums); renderGalleryGrid(); renderHomeFrames();
+          });
+        }
+
+        // store original album/idx for easier reference when in album view
+        cb.dataset.originalIdx = item.idx;
+        cb.dataset.originalAlbum = (typeof item.album !== 'undefined') ? item.album : currentAlbum;
+      });
+    }
+
+    function getAllImagesWithMeta(){
+      const res=[];
+      for(const k in albums){
+        const a = albums[k];
+        for(let i=0;i<a.length;i++){ res.push({src:a[i], album:parseInt(k), idx:i, albumName: albumNames[k]}); }
+      }
+      return res;
+    }
+
+    function getSelectedIndexes(){
+      const boxes = Array.from(galleryGrid.querySelectorAll('.gallery-item'));
+      const sel = [];
+      const allMeta = getAllImagesWithMeta();
+      boxes.forEach((b,displayIndex)=>{
+        const cb = b.querySelector('.select-checkbox'); if(cb && cb.checked){
+          const src = b.querySelector('.thumb img').src;
+          if(viewMode==='all'){
+            // find meta by src (more robust than relying on display index)
+            const meta = allMeta.find(m => m.src === src);
+            if(meta) sel.push(meta);
+          } else {
+            const albumIdx = currentAlbum;
+            const originalIdx = parseInt(cb.dataset.originalIdx);
+            sel.push({album: albumIdx, idx: originalIdx});
+          }
+        }
+      });
+      return sel;
+    }
+
+    document.getElementById('deleteSelected').addEventListener('click',()=>{
+      const sel = getSelectedIndexes(); if(sel.length===0){ alert('لم يتم تحديد أي صورة'); return; }
+      if(!confirm('حذف الصور المحددة؟')) return;
+      // delete from highest idx to lowest to avoid index shift
+      sel.sort((a,b)=>{
+        if(a.album !== b.album) return a.album - b.album;
+        return b.idx - a.idx;
+      }).forEach(s=>{ deleteImage(s.album, s.idx); });
+      renderGalleryGrid(); renderHomeFrames();
+    });
+
+    // handler to move selected images using the select dropdown
+    moveToAlbumSel.addEventListener('change', ()=>{
+      const target = parseInt(moveToAlbumSel.value);
+      if(isNaN(target)) return;
+      const sel = getSelectedIndexes();
+      if(sel.length===0){ alert('لم يتم تحديد أي صورة'); moveToAlbumSel.value = ''; return; }
+      // group by album and sort descending by idx per album to avoid shifts
+      const byAlbum = {};
+      sel.forEach(s => {
+        if(!byAlbum[s.album]) byAlbum[s.album] = [];
+        byAlbum[s.album].push(s.idx);
+      });
+      for(const from in byAlbum){
+        byAlbum[from].sort((a,b)=>b-a).forEach(idx => moveImage(parseInt(from), idx, target));
+      }
+      moveToAlbumSel.value = '';
+      renderGalleryGrid(); renderHomeFrames();
+    });
+
+    function promptMoveSingle(item){
+      const to = prompt('أدخل رقم الألبوم الهدف (0-'+(albumNames.length-1)+')\n'+ albumNames.map((n,i)=>i+': '+n).join('\n'));
+      const t = parseInt(to); if(isNaN(t) || t<0 || t>=albumNames.length) return; moveImage(item.album, item.idx, t);
+      renderGalleryGrid(); renderHomeFrames();
+    }
+
+    function deleteImage(albumIndex, idx){
+      if(!Array.isArray(albums[albumIndex])) return;
+      albums[albumIndex].splice(idx,1);
+      saveStored(albums);
+      renderGalleryGrid(); renderHomeFrames();
+    }
+    function moveImage(from, idx, to){
+      if(!Array.isArray(albums[from])) return;
+      const item = albums[from].splice(idx,1)[0];
+      if(item===undefined) return;
+      albums[to].unshift(item); saveStored(albums);
+    }
+
+    document.getElementById('viewAllBtn').addEventListener('click', ()=>{ openAll(); });
+
+    function getDragAfterElement(container, y){
+      const draggableElements = [...container.querySelectorAll('.gallery-item:not(.dragging)')];
+      return draggableElements.reduce((closest, child)=>{
+        const box = child.getBoundingClientRect(); const offset = y - box.top - box.height/2;
+        if(offset < 0 && offset > closest.offset){ return {offset: offset, element: child}; } else return closest;
+      }, {offset: Number.NEGATIVE_INFINITY}).element;
+    }
+
+    // ---------- Lightbox logic ----------
+    const lightboxOverlay = document.getElementById('lightboxOverlay');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxClose = document.getElementById('lightboxClose');
+
+    function openLightbox(src){
+      lightboxImg.src = src;
+      lightboxOverlay.classList.add('show');
+      lightboxOverlay.setAttribute('aria-hidden','false');
+    }
+    function closeLightbox(){
+      lightboxOverlay.classList.remove('show');
+      lightboxOverlay.setAttribute('aria-hidden','true');
+      lightboxImg.src = '';
+    }
+    lightboxOverlay.addEventListener('click', (e) => {
+      if(e.target === lightboxOverlay || e.target === lightboxClose) closeLightbox();
+    });
+    document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeLightbox(); });
+
+    // initial render
+    renderHomeFrames(); renderAlbumsPills();
+
+  </script></body>
+</html>
+```
